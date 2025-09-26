@@ -33,6 +33,11 @@ A modern full-stack recruitment platform built with React, Node.js, Express, and
 - **Helmet** - Security middleware
 - **CORS** - Cross-origin resource sharing
 
+## Production Demo
+
+**View Project Demo**
+[view project](https://colbin-assignment-swart.vercel.app)
+
 ## Getting Started
 
 ### Prerequisites
