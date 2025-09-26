@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -21,6 +23,7 @@ const Navbar = () => {
             </span>
           </Link>
 
+          {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
               to="/"
@@ -78,12 +81,82 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button className="text-gray-600 hover:text-gray-900">
-              <Menu className="w-6 h-6" />
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              {mobileOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile menu dropdown */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-gray-200 bg-white px-4 pb-4 space-y-2">
+          <Link
+            to="/"
+            onClick={() => setMobileOpen(false)}
+            className={`block text-sm font-medium ${
+              isActive("/")
+                ? "text-primary-600"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Home
+          </Link>
+
+          {user ? (
+            <>
+              <Link
+                to="/profile"
+                onClick={() => setMobileOpen(false)}
+                className={`block text-sm font-medium ${
+                  isActive("/profile")
+                    ? "text-primary-600"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Profile
+              </Link>
+              <button
+                onClick={() => {
+                  logout();
+                  setMobileOpen(false);
+                }}
+                className="block w-full text-left text-sm font-medium text-gray-600 hover:text-gray-900"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                onClick={() => setMobileOpen(false)}
+                className={`block text-sm font-medium ${
+                  isActive("/login")
+                    ? "text-primary-600"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMobileOpen(false)}
+                className="block text-sm font-medium text-primary-600 hover:text-primary-700"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+        </div>
+      )}
     </nav>
   );
 };
